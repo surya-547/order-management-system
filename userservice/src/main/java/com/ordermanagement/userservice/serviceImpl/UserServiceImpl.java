@@ -3,15 +3,15 @@ package com.ordermanagement.userservice.serviceImpl;
 import com.ordermanagement.userservice.dto.UserRequestDto;
 import com.ordermanagement.userservice.dto.UserResponseDto;
 import com.ordermanagement.userservice.entity.User;
+import com.ordermanagement.userservice.exception.UserAlreadyExistsException;
+import com.ordermanagement.userservice.exception.UserNotFoundException;
 import com.ordermanagement.userservice.mapper.UserMapper;
 import com.ordermanagement.userservice.repository.UserRespository;
 import com.ordermanagement.userservice.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
         if(existedUser.isPresent()){
 
-            throw new RuntimeException("User already registered !!!");
+            throw new UserAlreadyExistsException("User already exists with email: " +userRequestDto.getEmail());
         }
         User user = userMapper.toEntity(userRequestDto);
 
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto getUserById(Long id) {
 
         User userById =  userRespository.findById(id)
-                .orElseThrow(()->new RuntimeException (" User not Found"));
+                .orElseThrow(()->new UserNotFoundException(" User not found with id:" +id));
 
         return userMapper.toResponseDto(userById);
     }
