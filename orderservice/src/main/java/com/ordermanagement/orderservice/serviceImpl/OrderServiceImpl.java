@@ -4,12 +4,14 @@ import com.ordermanagement.orderservice.dto.OrderRequestDto;
 import org.springframework.stereotype.Service;
 import src.main.java.com.ordermanagement.orderservice.dto.OrderResponseDto;
 import src.main.java.com.ordermanagement.orderservice.entity.Order;
+import src.main.java.com.ordermanagement.orderservice.exception.OrderNotFoundException;
 import src.main.java.com.ordermanagement.orderservice.mapper.OrderMapper;
 import src.main.java.com.ordermanagement.orderservice.repository.OrderRepository;
 import src.main.java.com.ordermanagement.orderservice.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -40,5 +42,13 @@ public class OrderServiceImpl implements OrderService {
 
         return orderMapper.toResponseDto(savedOrder);
 
+    }
+
+    @Override
+    public OrderResponseDto getOrderById(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+
+        return orderMapper.toResponseDto(order);
     }
 }
