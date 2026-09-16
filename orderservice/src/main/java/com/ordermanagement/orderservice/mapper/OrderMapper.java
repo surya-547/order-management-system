@@ -1,8 +1,10 @@
-package src.main.java.com.ordermanagement.orderservice.mapper;
+package com.ordermanagement.orderservice.mapper;
 
-import src.main.java.com.ordermanagement.orderservice.dto.OrderResponseDto;
-import src.main.java.com.ordermanagement.orderservice.entity.Order;
+import com.ordermanagement.orderservice.dto.OrderResponseDto;
+import com.ordermanagement.orderservice.entity.Order;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderMapper {
 
     public Order toEntity(com.ordermanagement.orderservice.dto.OrderRequestDto orderRequestDto) {

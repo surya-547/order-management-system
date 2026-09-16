@@ -1,8 +1,9 @@
-package src.main.java.com.ordermanagement.orderservice.dto;
+package com.ordermanagement.orderservice.dto;
+import com.ordermanagement.orderservice.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import src.main.java.com.ordermanagement.orderservice.entity.Order;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

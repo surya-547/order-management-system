@@ -1,4 +1,4 @@
-package src.main.java.com.ordermanagement.orderservice.entity;
+package com.ordermanagement.orderservice.entity;
 
 
 import jakarta.persistence.*;
@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.EnumType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "orders")
 public class Order {
 
     @Id
