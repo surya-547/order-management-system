@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Service
@@ -32,7 +31,6 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public DeliveryResponseDto createDelivery(DeliveryRequestDto deliveryRequestDto) {
 
-
         Delivery delivery = new Delivery();
         delivery.setOrderId(deliveryRequestDto.getOrderId());
         delivery.setAddress(deliveryRequestDto.getAddress());
@@ -43,18 +41,27 @@ public class DeliveryServiceImpl implements DeliveryService {
         delivery.setUpdatedAt(now);
         Delivery savedDelivery = deliveryRepository.save(delivery);
         return deliveryMapper.toResponseDto(savedDelivery);
+
     }
 
     @Override
     public DeliveryResponseDto updateDelivery(Long id, DeliveryRequestDto deliveryRequestDto) {
-        return null;
+
+        Delivery delivery = deliveryRepository.findById(id)
+                .orElseThrow(()-> new DeliveryNotFoundException("Delivery not found with id: " + id));
+
+        delivery.setAddress(deliveryRequestDto.getAddress());
+        delivery.setUpdatedAt(LocalDateTime.now());
+        deliveryRepository.save(delivery);
+        return deliveryMapper.toResponseDto(delivery);
+
     }
 
     @Override
     public DeliveryResponseDto getDeliveryById(Long id) {
 
         Delivery delivery = deliveryRepository.findById(id)
-                                .orElseThrow(() -> new DeliveryNotFoundException("Delivery not found with id: " + id));
+                .orElseThrow(() -> new DeliveryNotFoundException("Delivery not found with id: " + id));
         return deliveryMapper.toResponseDto(delivery);
     }
 
@@ -68,7 +75,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public DeliveryResponseDto assignDeliveryPartner(Long id, Long deliveryPartnerId) {
         Delivery delivery = deliveryRepository.findById(id)
-                            .orElseThrow(()-> new DeliveryNotFoundException(" Delivery not found with id: "+ id));
+                .orElseThrow(()-> new DeliveryNotFoundException(" Delivery not found with id: "+ id));
 
         delivery.setDeliveryPartnerId(deliveryPartnerId);
         delivery.setUpdatedAt(LocalDateTime.now());
@@ -78,7 +85,14 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public DeliveryResponseDto updateDeliveryStatus(Long id, Delivery.Status status) {
-        return null;
+
+        Delivery delivery =  deliveryRepository.findById(id)
+                .orElseThrow(()-> new DeliveryNotFoundException(" Delivery not Found with id: " + id));
+
+        delivery.setUpdatedAt(LocalDateTime.now());
+        delivery.setDeliveryStatus(status);
+        deliveryRepository.save(delivery);
+        return deliveryMapper.toResponseDto(delivery);
     }
 
 
