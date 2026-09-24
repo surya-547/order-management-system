@@ -3,6 +3,7 @@ package com.ordermanagement.deliveryservice.controller;
 import com.ordermanagement.deliveryservice.dtos.requestDto.DeliveryRequestDto;
 import com.ordermanagement.deliveryservice.dtos.responseDto.DeliveryResponseDto;
 import com.ordermanagement.deliveryservice.service.DeliveryService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class DeliveryController {
     }
 
     @PostMapping
-    public ResponseEntity<DeliveryResponseDto> createDelivery(@RequestBody DeliveryRequestDto deliveryRequestDto){
+    public ResponseEntity<DeliveryResponseDto> createDelivery(@Valid  @RequestBody DeliveryRequestDto deliveryRequestDto){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(deliveryService.createDelivery(deliveryRequestDto));
     }
@@ -45,5 +46,11 @@ public class DeliveryController {
     public ResponseEntity<DeliveryResponseDto> assignDeliveryPartner(@PathVariable Long id, @PathVariable Long deliveryPartnerId){
 
         return ResponseEntity.status(HttpStatus.OK).body(deliveryService.assignDeliveryPartner(id, deliveryPartnerId));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DeliveryResponseDto> updateDelivery( @PathVariable Long id, @Valid @RequestBody DeliveryRequestDto deliveryRequestDto ){
+
+        return ResponseEntity.status(HttpStatus.OK).body(deliveryService.updateDelivery(id, deliveryRequestDto));
     }
 }

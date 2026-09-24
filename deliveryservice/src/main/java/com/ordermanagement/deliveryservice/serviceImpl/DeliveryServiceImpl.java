@@ -86,14 +86,13 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public DeliveryResponseDto updateDeliveryStatus(Long id, Delivery.Status status) {
 
-        Delivery delivery =  deliveryRepository.findById(id)
-                .orElseThrow(()-> new DeliveryNotFoundException(" Delivery not Found with id: " + id));
+        Delivery delivery = deliveryRepository.findById(id)
+                .orElseThrow(() -> new DeliveryNotFoundException(" Delivery not Found with id: " + id));
 
         delivery.setUpdatedAt(LocalDateTime.now());
         delivery.setDeliveryStatus(status);
         deliveryRepository.save(delivery);
         return deliveryMapper.toResponseDto(delivery);
     }
-
 
 }
