@@ -9,6 +9,8 @@ import com.ordermanagement.notificationservice.service.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -31,6 +33,27 @@ public class NotificationServiceImpl implements NotificationService {
 
         return notificationMapper.toResponseDto(savedNotification);
 
+    }
+
+    @Override
+    public NotificationResponseDto getNotificationById(Long id) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(" Notification Not Found"));
+
+        return notificationMapper.toResponseDto(notification);
+    }
+
+    @Override
+    public List<NotificationResponseDto> getNotificationsByUserId(Long userId) {
+
+        List<Notification> notifications = notificationRepository.findByUserId(userId);
+
+        List<NotificationResponseDto> listOfNotifications = notifications
+                .stream()
+                .map(notificationMapper::toResponseDto)
+                .toList();
+
+        return listOfNotifications;
     }
 
 }
