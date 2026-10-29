@@ -87,6 +87,7 @@
         <module>userservice</module>
         <module>orderservice</module>
         <module>deliveryservice</module>
+        <module>notificationservice</module>
     </modules>
 
 </project>
