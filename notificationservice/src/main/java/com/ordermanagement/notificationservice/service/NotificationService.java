@@ -2,7 +2,6 @@ package com.ordermanagement.notificationservice.service;
 
 import com.ordermanagement.notificationservice.dtos.NotificationRequestDto;
 import com.ordermanagement.notificationservice.dtos.NotificationResponseDto;
-import com.ordermanagement.notificationservice.entity.Notification;
 
 import java.util.List;
 
