@@ -6,6 +6,8 @@ import com.ordermanagement.notificationservice.entity.Notification;
 import com.ordermanagement.notificationservice.mapper.NotificationMapper;
 import com.ordermanagement.notificationservice.repository.NotificationRepository;
 import com.ordermanagement.notificationservice.service.NotificationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -47,12 +49,17 @@ public class NotificationServiceImpl implements NotificationService {
 
         List<Notification> notifications = notificationRepository.findByUserId(userId);
 
-        List<NotificationResponseDto> listOfNotifications = notifications
+        return notifications
                 .stream()
                 .map(notificationMapper::toResponseDto)
                 .toList();
+    }
 
-        return listOfNotifications;
+    @Override
+    public Page<NotificationResponseDto> getAllNotifications(Pageable pageable) {
+
+        return notificationRepository.findAll(pageable)
+                        .map(notificationMapper::toResponseDto);
     }
 
 }

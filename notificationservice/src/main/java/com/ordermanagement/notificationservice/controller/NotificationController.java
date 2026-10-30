@@ -3,6 +3,8 @@ package com.ordermanagement.notificationservice.controller;
 import com.ordermanagement.notificationservice.dtos.NotificationRequestDto;
 import com.ordermanagement.notificationservice.dtos.NotificationResponseDto;
 import com.ordermanagement.notificationservice.service.NotificationService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,19 +20,28 @@ public class NotificationController {
     }
 
     @PostMapping
-    public NotificationResponseDto createNotification(@RequestBody NotificationRequestDto notificationRequestDto){
+    public NotificationResponseDto createNotification(@RequestBody NotificationRequestDto notificationRequestDto) {
         return notificationService.createNotification(notificationRequestDto);
     }
 
     @GetMapping("/{id}")
-    public NotificationResponseDto getNotificationById(@PathVariable Long id){
+    public NotificationResponseDto getNotificationById(@PathVariable Long id) {
 
         return notificationService.getNotificationById(id);
     }
 
     @GetMapping("/userId/{userId}")
-    public List<NotificationResponseDto> getNotificationByUserId(@PathVariable Long userId){
+    public List<NotificationResponseDto> getNotificationByUserId(@PathVariable Long userId) {
 
         return notificationService.getNotificationsByUserId(userId);
+    }
+
+    @GetMapping
+    public Page<NotificationResponseDto> getAllNotifications(@RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "5") int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return notificationService.getAllNotifications(pageRequest);
     }
 }
