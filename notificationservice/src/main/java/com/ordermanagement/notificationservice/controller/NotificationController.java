@@ -2,7 +2,9 @@ package com.ordermanagement.notificationservice.controller;
 
 import com.ordermanagement.notificationservice.dtos.NotificationRequestDto;
 import com.ordermanagement.notificationservice.dtos.NotificationResponseDto;
+import com.ordermanagement.notificationservice.dtos.NotificationStatusUpdateDto;
 import com.ordermanagement.notificationservice.service.NotificationService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -22,7 +24,7 @@ public class NotificationController {
     }
 
     @PostMapping
-    public ResponseEntity<NotificationResponseDto> createNotification(@RequestBody NotificationRequestDto notificationRequestDto) {
+    public ResponseEntity<NotificationResponseDto> createNotification(@Valid @RequestBody NotificationRequestDto notificationRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(notificationService.createNotification(notificationRequestDto));
     }
 
@@ -40,10 +42,16 @@ public class NotificationController {
 
     @GetMapping
     public ResponseEntity<Page<NotificationResponseDto>> getAllNotifications(@RequestParam(defaultValue = "0") int page,
-                                                             @RequestParam(defaultValue = "5") int size) {
+                                                                             @RequestParam(defaultValue = "5") int size) {
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
         return ResponseEntity.ok(notificationService.getAllNotifications(pageRequest));
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<NotificationResponseDto> updateNotificationStatus(@PathVariable Long id, @Valid @RequestBody NotificationStatusUpdateDto notificationStatusUpdateDto){
+
+        return ResponseEntity.ok(notificationService.updateNotificationStatus(id,notificationStatusUpdateDto.getNotificationStatus()));
     }
 }

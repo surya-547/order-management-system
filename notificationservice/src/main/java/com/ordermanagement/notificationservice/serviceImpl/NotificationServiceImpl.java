@@ -3,6 +3,7 @@ package com.ordermanagement.notificationservice.serviceImpl;
 import com.ordermanagement.notificationservice.dtos.NotificationRequestDto;
 import com.ordermanagement.notificationservice.dtos.NotificationResponseDto;
 import com.ordermanagement.notificationservice.entity.Notification;
+import com.ordermanagement.notificationservice.exception.NotificationNotFoundException;
 import com.ordermanagement.notificationservice.mapper.NotificationMapper;
 import com.ordermanagement.notificationservice.repository.NotificationRepository;
 import com.ordermanagement.notificationservice.service.NotificationService;
@@ -39,7 +40,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationResponseDto getNotificationById(Long id) {
         Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(" Notification Not Found"));
+                .orElseThrow(() -> new NotificationNotFoundException(" Notification Not Found"));
 
         return notificationMapper.toResponseDto(notification);
     }
@@ -59,7 +60,25 @@ public class NotificationServiceImpl implements NotificationService {
     public Page<NotificationResponseDto> getAllNotifications(Pageable pageable) {
 
         return notificationRepository.findAll(pageable)
-                        .map(notificationMapper::toResponseDto);
+                .map(notificationMapper::toResponseDto);
+    }
+
+    @Override
+    public NotificationResponseDto updateNotificationStatus(Long id, Notification.NotificationStatus status) {
+
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new NotificationNotFoundException("Notification not found with id: " + id));
+
+        notification.setNotificationStatus(status);
+
+        if(status == Notification.NotificationStatus.SENT){
+            notification.setSentAt(LocalDateTime.now());
+        }
+
+        Notification savedNotification = notificationRepository.save(notification);
+
+        return notificationMapper.toResponseDto(savedNotification);
+
     }
 
 }

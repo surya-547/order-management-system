@@ -15,7 +15,6 @@ public class NotificationMapper {
         Notification notification = new Notification();
 
         notification.setNotificationType(notificationRequestDto.getNotificationType());
-        notification.setNotificationStatus(notificationRequestDto.getNotificationStatus());
         notification.setMessage(notificationRequestDto.getMessage());
         notification.setOrderId(notificationRequestDto.getOrderId());
         notification.setUserId(notificationRequestDto.getUserId());
