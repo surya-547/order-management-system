@@ -19,4 +19,6 @@ public interface NotificationService {
     public Page getAllNotifications(Pageable pageable);
 
     public NotificationResponseDto updateNotificationStatus(Long id, Notification.NotificationStatus status);
+
+    public void deleteNotification(Long id);
 }
